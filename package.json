@@ -4,7 +4,7 @@
   "description": "a nodejs project to learn testing with jest",
   "main": "app.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest --watchAll"
   },
   "author": "julio romero",
   "license": "MIT",
