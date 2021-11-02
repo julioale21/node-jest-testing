@@ -7,7 +7,7 @@ const endpointUrl = '/todos/';
 
 let firstTodo;
 
-jest.setTimeout(30000);
+jest.setTimeout(10000);
 
 describe(endpointUrl, () => {
   test('GET' + endpointUrl, async () => {
