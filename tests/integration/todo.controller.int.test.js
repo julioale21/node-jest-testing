@@ -1,5 +1,6 @@
 const request = require('supertest');
 const app = require('../../app');
+const { getTodoById } = require('../../controllers/todo.controller');
 const newTodo = require('../mock-data/new-todo.json');
 
 const endpointUrl = '/todos/';
@@ -24,6 +25,10 @@ describe(endpointUrl, () => {
     expect(response.statusCode).toBe(200);
     expect(response.body.title).toBe(firstTodo.title);
     expect(response.body.done).toBe(firstTodo.done);
+  });
+  test("GET todo by id doesn't exists" + endpointUrl + getTodoById, async () => {
+    const response = await request(app).get(endpointUrl + "61806aa9bce4c6f529744500");
+    expect(response.statusCode).toBe(404);
   });
 
   it('POST' + endpointUrl, async () => {
