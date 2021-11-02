@@ -60,6 +60,14 @@ describe('TodoController.getTodoById', () => {
     expect(res._getJSONData()).toStrictEqual(newTodo);
     expect(res._isEndCalled()).toBeTruthy();
   });
+
+  it('should handle errors', async () => {
+    const errorMessage = { message: 'Error finding todo' };
+    const rejectedPromise = Promise.reject(errorMessage);
+    TodoModel.findById.mockReturnValue(rejectedPromise);
+    await TodoController.getTodoById(req, res, next);
+    expect(next).toHaveBeenCalledWith(errorMessage);
+  });
 })
 
 describe('TodoController.createTodo', () => {
