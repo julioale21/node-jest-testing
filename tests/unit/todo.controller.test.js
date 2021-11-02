@@ -55,7 +55,6 @@ describe('TodoController.getTodoById', () => {
 
   it('should return json body and response code 200', async () => {
     TodoModel.findById.mockReturnValue(newTodo);
-    req.params.todoId = '61806aa9bce4c6f529780500';
     await TodoController.getTodoById(req, res, next);
     expect(res.statusCode).toBe(200);
     expect(res._getJSONData()).toStrictEqual(newTodo);
