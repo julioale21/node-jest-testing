@@ -9,4 +9,6 @@ exports.createTodo = async (req, res, next) => {
   }
 };
 
-exports.getTodos = (req, res, next) => {};
+exports.getTodos = (req, res, next) => {
+  TodoModel.find({});
+};
