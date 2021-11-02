@@ -41,6 +41,12 @@ describe('TodoController.getTodos', () => {
   });
 });
 
+describe('TodoController.getTodoById', () => {
+  it('should have a getTodoById', () => {
+    expect(typeof TodoController.getTodoById).toBe('function');
+  })
+})
+
 describe('TodoController.createTodo', () => {
   beforeEach(() => {
     req.body = newTodo;

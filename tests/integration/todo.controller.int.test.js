@@ -4,6 +4,8 @@ const newTodo = require('../mock-data/new-todo.json');
 
 const endpointUrl = '/todos/';
 
+jest.setTimeout(30000);
+
 describe(endpointUrl, () => {
   test('GET' + endpointUrl, async () => {
     const response = await request(app)
