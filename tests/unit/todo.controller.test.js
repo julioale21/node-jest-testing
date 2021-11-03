@@ -146,4 +146,11 @@ describe('TodoController.updateTodo', () => {
     await TodoController.updateTodo(req, res, next);
     expect(next).toHaveBeenCalledWith(errorMessage);
   });
+
+  it('return a 404 error when todo id doesnt exists', async () => {
+    TodoModel.findByIdAndUpdate.mockReturnValue(null);
+    await TodoController.updateTodo(req, res, next);
+    expect(res.statusCode).toBe(404);
+    expect(res._isEndCalled()).toBeTruthy();
+  });
 });
