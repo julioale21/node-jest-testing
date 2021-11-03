@@ -169,12 +169,11 @@ describe('TodoController.deleteTodo', () => {
   });
 
   it('should return a response with json data and status code 200', async () => {
-    req.params.todoId = todoId;
-    TodoModel.findByIdAndDelete.mockReturnValue(true);
+    TodoModel.findByIdAndDelete.mockReturnValue(newTodo);
     await TodoController.deleteTodo(req, res, next);
     expect(res.statusCode).toBe(200);
     expect(res._isEndCalled()).toBeTruthy();
-    expect(res._getJSONData()).toStrictEqual(true);
+    expect(res._getJSONData()).toStrictEqual(newTodo);
   });
 
   it('should handle errors', async () => {

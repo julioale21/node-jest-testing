@@ -6,6 +6,8 @@ const newTodo = require('../mock-data/new-todo.json');
 const endpointUrl = '/todos/';
 
 let firstTodo, newTodoId;
+const nonExistingTodId = '61806aa9bce4c6f529744500';
+const testData = { title: "Make integration test for PUT", done: true };
 
 jest.setTimeout(10000);
 
@@ -27,11 +29,11 @@ describe(endpointUrl, () => {
     expect(response.body.done).toBe(firstTodo.done);
   });
   test("GET todo by id doesn't exists" + endpointUrl + getTodoById, async () => {
-    const response = await request(app).get(endpointUrl + "61806aa9bce4c6f529744500");
+    const response = await request(app).get(endpointUrl + nonExistingTodId);
     expect(response.statusCode).toBe(404);
   });
 
-  it('POST' + endpointUrl, async () => {
+  test('POST' + endpointUrl, async () => {
     const response = await request(app)
       .post(endpointUrl)
       .send(newTodo);
@@ -41,7 +43,7 @@ describe(endpointUrl, () => {
     newTodoId = response.body._id;
   });
 
-  it('should return error 500 on malformed data with POST' + endpointUrl, async () => {
+  test('should return error 500 on malformed data with POST' + endpointUrl, async () => {
     const response = await request(app)
       .post(endpointUrl)
       .send({ title: "Missing done property"});
@@ -52,11 +54,22 @@ describe(endpointUrl, () => {
     })
   });
 
-  it('PUT' + endpointUrl, async () => {
-    const testData = { title: "Make integration test for PUT", done: true };
+  test('PUT' + endpointUrl, async () => {
     const res = await request(app).put(endpointUrl + newTodoId).send(testData);
     expect(res.statusCode).toBe(200);
     expect(res.body.title).toBe(testData.title);
     expect(res.body.done).toBe(testData.done);
+  });
+
+  test('HTTP DELETE', async () => {
+    const res = await request(app).delete(endpointUrl + newTodoId).send();
+    expect(res.statusCode).toBe(200);
+    expect(res.body.title).toBe(testData.title);
+    expect(res.body.done).toBe(testData.done);
+  });
+
+  test('HTTP DELETE 404', async () => {
+    const res = await request(app).delete(endpointUrl + nonExistingTodId).send();
+    expect(res.statusCode).toBe(404);
   });
 });
