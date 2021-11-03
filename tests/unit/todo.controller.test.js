@@ -156,3 +156,39 @@ describe('TodoController.updateTodo', () => {
     expect(res._isEndCalled()).toBeTruthy();
   });
 });
+
+describe('TodoController.deleteTodo', () => {
+  it('should have a deleteTodo function', () => {
+    expect(typeof TodoController.deleteTodo).toBe('function');
+  });
+
+  it('should call TodoModel.delete method', async () => {
+    req.params.todoId = todoId;
+    await TodoController.deleteTodo(req, res, next);
+    expect(TodoModel.findByIdAndDelete).toHaveBeenCalledWith(todoId);
+  });
+
+  it('should return a response with json data and status code 200', async () => {
+    req.params.todoId = todoId;
+    TodoModel.findByIdAndDelete.mockReturnValue(true);
+    await TodoController.deleteTodo(req, res, next);
+    expect(res.statusCode).toBe(200);
+    expect(res._isEndCalled()).toBeTruthy();
+    expect(res._getJSONData()).toStrictEqual(true);
+  });
+
+  it('should handle errors', async () => {
+    const errorMessage = { message: 'Error deleting' };
+    const rejectedPromise = Promise.reject(errorMessage);
+    TodoModel.findByIdAndDelete.mockReturnValue(rejectedPromise);
+    await TodoController.deleteTodo(req, res, next);
+    expect(next).toHaveBeenCalledWith(errorMessage);
+  });
+
+  it('should return a 404 status code when todoId doesnt exists', async () => {
+    TodoModel.findByIdAndDelete.mockReturnValue(null);
+    await TodoController.deleteTodo(req, res, next);
+    expect(res.statusCode).toBe(404);
+    expect(res._isEndCalled()).toBeTruthy();
+  });
+});
